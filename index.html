@@ -27,9 +27,9 @@
         .coin {
             width: 100px;
             height: 100px;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Gold_coin.svg/1024px-Gold_coin.svg.png'); /* Изменено на более надежный URL */
-            background-size: contain; /* Изменено для более лучшего отображения */
-            background-repeat: no-repeat; /* Убираем повторение изображения */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Gold_coin.svg/1024px-Gold_coin.svg.png');
+            background-size: contain;
+            background-repeat: no-repeat;
             cursor: pointer;
             border-radius: 50%;
             transition: transform 0.1s;
@@ -70,32 +70,34 @@
         <button id="sendButton">Отправить результат</button>
     </div>
 
-<script>
-    let score = 0;
+    <script>
+        let score = 0;
 
-    document.getElementById("coin").addEventListener("click", () => {
-        score += 1;
-        document.getElementById("score").innerText = "Счет: " + score;
-    });
+        document.getElementById("coin").addEventListener("click", () => {
+            score += 1;
+            document.getElementById("score").innerText = "Счет: " + score;
+        });
 
-    document.getElementById("sendButton").addEventListener("click", sendDataToTelegram);
+        document.getElementById("sendButton").addEventListener("click", sendDataToTelegram);
 
-    function sendDataToTelegram() {
-        // Проверка, существует ли объект Telegram и его WebApp
-        if (window.Telegram && window.Telegram.WebApp) {
-            // Отправляем данные о количестве тапов боту
-            window.Telegram.WebApp.sendData(score.toString());
+        function sendDataToTelegram() {
+            // Проверка, существует ли объект Telegram и его WebApp
+            if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+                // Отправляем данные о количестве тапов боту
+                window.Telegram.WebApp.sendData(score.toString());
+            } else {
+                console.error("WebApp API не доступен. Убедитесь, что приложение запущено через Telegram.");
+                alert("WebApp API не доступен. Пожалуйста, откройте это приложение через Telegram.");
+            }
+        }
+
+        // Инициализация WebApp
+        if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
         } else {
             console.error("WebApp API не доступен. Убедитесь, что приложение запущено через Telegram.");
+            alert("WebApp API не доступен. Пожалуйста, откройте это приложение через Telegram.");
         }
-    }
-
-    // Инициализация WebApp
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-    } else {
-        console.error("WebApp API не доступен. Убедитесь, что приложение запущено через Telegram.");
-    }
-</script>
+    </script>
 </body>
 </html>
