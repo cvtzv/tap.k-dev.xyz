@@ -70,28 +70,32 @@
         <button id="sendButton">Отправить результат</button>
     </div>
 
-    <script>
-        let score = 0;
+<script>
+    let score = 0;
 
-        document.getElementById("coin").addEventListener("click", () => {
-            score += 1;
-            document.getElementById("score").innerText = "Счет: " + score;
-        });
+    document.getElementById("coin").addEventListener("click", () => {
+        score += 1;
+        document.getElementById("score").innerText = "Счет: " + score;
+    });
 
-        // Перемещаем обработчик нажатия на кнопку в отдельную функцию
-        document.getElementById("sendButton").addEventListener("click", sendDataToTelegram);
+    document.getElementById("sendButton").addEventListener("click", sendDataToTelegram);
 
-        function sendDataToTelegram() {
-            if (window.Telegram.WebApp) {
-                // Отправляем данные о количестве тапов боту
-                window.Telegram.WebApp.sendData(score.toString());
-            } else {
-                console.error("WebApp API не доступен.");
-            }
+    function sendDataToTelegram() {
+        // Проверка, существует ли объект Telegram и его WebApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            // Отправляем данные о количестве тапов боту
+            window.Telegram.WebApp.sendData(score.toString());
+        } else {
+            console.error("WebApp API не доступен. Убедитесь, что приложение запущено через Telegram.");
         }
+    }
 
-        // Инициализация WebApp
+    // Инициализация WebApp
+    if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();
-    </script>
+    } else {
+        console.error("WebApp API не доступен. Убедитесь, что приложение запущено через Telegram.");
+    }
+</script>
 </body>
 </html>
